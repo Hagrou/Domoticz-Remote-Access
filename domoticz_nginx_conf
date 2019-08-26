@@ -1,0 +1,69 @@
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# https://www.nginx.com/resources/wiki/start/
+# https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+# https://wiki.debian.org/Nginx/DirectoryStructure
+#
+# In most cases, administrators will remove this file from sites-enabled/ and
+# leave it as reference inside of sites-available where it will continue to be
+# updated by the nginx packaging team.
+#
+# This file will automatically load configuration files provided by other
+# applications, such as Drupal or Wordpress. These applications will be made
+# available underneath a path with that package name, such as /drupal8.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+server {
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+
+	ssl_certificate /etc/nginx/certs/server/vpsServer.crt;
+	ssl_certificate_key /etc/nginx/certs/server/vpsServer.key;
+
+	# activation de la double authent
+	ssl_client_certificate /etc/nginx/certs/ca/myCA.crt;
+	ssl_verify_client on;
+	
+	root /var/www/html;
+
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+
+
+	location = /robots.txt {
+        	 add_header Content-Type text/plain;
+        	 return 200 "User-agent: *\nDisallow: /\n";
+    	}
+	
+	location /domoticz/ {
+        	proxy_pass http://127.0.0.1:6789/;
+	        proxy_redirect off;
+	        proxy_buffering off;
+	        proxy_read_timeout 300;
+	        proxy_connect_timeout 300;
+	        proxy_set_header Host $host;
+        	proxy_http_version 1.1;
+	        proxy_set_header Upgrade $http_upgrade;
+	        proxy_set_header Connection "upgrade";
+	        proxy_set_header Host $host;
+	 }
+
+	 location /domoticz/(.*) {
+	        proxy_pass http://127.0.0.1:6789/$1;
+        	proxy_redirect off;
+	        proxy_buffering off;
+	        proxy_read_timeout 300;
+	        proxy_connect_timeout 300;
+	        proxy_set_header Host $host;
+	        proxy_http_version 1.1;
+        	proxy_set_header Upgrade $http_upgrade;
+	        proxy_set_header Connection "upgrade";
+	        proxy_set_header Host $host;
+        }
+}
+
