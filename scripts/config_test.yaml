@@ -1,0 +1,19 @@
+{
+    #AlarmController Sensor
+        'wifiSSID'        : 'myWifiName',
+        'wifiPassword'    : 'MyWifiPassword',
+        'adminName'       : 'admin',
+        'adminPwd'        : 'MyHttpPassword',
+        'domoticzURL'     : 'http://192.168.0.128:8080',
+        'controllerServerPort': '80',
+        'securityLevelIDX': '6',
+        'alarmIDX'        : '5',
+        
+    #Domoticz Scripts
+        'securityCtrlUrl' : 'http://192.168.0.130',
+        'armedDelaySec'   : '30',  # delay for transition Arming->Armed
+        'faultDelaySec'   : '30',  # delay to return Warn1->Armed
+        'alarmDelaySec'   : '10',  # delay for transition Warn2->Alarm
+        'rearmDelaySec'   : '300', # delay after Alarm->Armed
+        'blindDelaySec'   : '10',  # delay of not taking into account the activation of the same device
+}
